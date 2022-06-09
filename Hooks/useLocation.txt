@@ -1,0 +1,21 @@
+useLocation hook returns the location object that represents the current URL. Think of it as a useState which
+returns a new location whenever the URL changes
+
+import {useLocation} rom "react-router-dom"
+
+const Index = () => {
+    const location = useLocation()
+
+    return (
+        <div>
+            <h1> Location: {location.pathname.replace("/", "") page}</h1>
+            {location.pathname === "/about/dashboard" ? <p>This is your dashboard</p> : <p>Login to see dashboard</p>}
+        </div>
+        )
+}
+
+we created a var named "location" to store the URL path. 
+location.pathname gives the URL of the current page you are viewing i.e www..../Login
+
+.replace("what to replace", "new value") method replaces the "/" to '' bcoz we dont want the "/" to show in the 
+URL name 

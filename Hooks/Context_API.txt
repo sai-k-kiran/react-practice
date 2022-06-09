@@ -1,0 +1,118 @@
+Root component --> App.js
+
+We are rendering MovieList.js and Nav.js in App.js. That means MovieList and Nav.js are child components of App.js
+
+In MovieList.js, we are rendering Movie.js. 
+
+Hierarchy >> App --> Nav and MovieList --> Movie. There is a state in MovieList which contains an array of movies. We are passing this state to its child component(i.e Movie).
+
+Suppose we want the state in its sibling component( i.e Nav).
+
+For that, we can lift the state upwards i.e write the state in the App.js or we can use context API.
+
+1. Create a new file --> Context.js. In that, first create create context Provider named MovieProvider
+
+export const MovieProvider = ({children}) => {
+
+	return (
+		)
+}
+
+2. CUt the state from MovieList and paste in MovieProvider
+
+export const MovieProvider = () => {
+	const [movies, setMovies] = useState([
+			{ name: "Harry Potter",
+			  price: '10',
+			  id: 1
+			},
+			{ name: "LOTR",
+			  price: '20',
+			  id: 2
+			},
+			{ name: "Avengers",
+			  price: '30',
+			  id: 3
+			}
+		])
+
+	return (
+		
+		)
+}
+
+3. Create a context for MovieProvider. This context is used to access(or consume) the state in the MovieProvider.
+
+export const MovieContext = React.createContext()
+
+export const MovieProvider = ...
+
+4. In render method of MovieProvider, pass the state using MovieContext
+
+...
+...
+return (
+		<MovieContext.Provider value={[movies, setMovies]}>
+			{children}
+		</MovieContext.Provider>
+		)
+
+{children} is nothing but a substitute name for the components in which we would like to pass the state.
+Here those components who are children are Nav and MovieList.
+
+Also destructure {children} in the MovieProvider comp.
+
+export const MovieProvider = ({children}) => ...
+
+5. Wrap the whole project structure in MovieProvider
+
+ 	<MovieProvider>
+      <div className='App'>
+        <Nav />
+        <MovieList />
+      </div>
+    </MovieProvider>
+
+6. In MovieList comp, access the state using useContext. First import MovieContext at top
+
+const MovieList = () => {
+	const [movies, setMovies] = useContext(MovieContext)
+	...
+
+NOTE: IF YOU WANT TO USE THE SAME CONTEXT IN MOVIELIST AND NAV AND ANY OTHER, USE SAME NAME FOR CONTEXT. EX --> const [movies, setMovies] = useContext(MovieContext).
+
+Dont use above name in MovieList and const list = useContext(MovieContext) in Nav. 
+Use const [movies, setMovies] = useContext(MovieContext) in Nav also.
+
+7. Use the movies as you use a normal state.
+
+		{movies.map(movie => (
+			<Movie movie={movie} />
+		))}
+	
+8. You can also update the state using context. Create AddMovie.js and create a form inside that.
+
+const AddMovie = (props) => {
+	const [data, setData] = useState({name: '', price: ''})
+	const [movies, setMovies] = useContext(MovieContext)
+
+	const handleUpdate = e => {
+		const input = e.target.name
+        const value = e.target.value
+        setData({...data, [input]: value})
+	}
+	const handlesubmit = e => {
+		e.preventDefault()
+		setMovies(prevMovies => [...prevMovies, {name: data.name, price: data.price}])
+		setData({name: '', price: ''})
+	}
+	return(
+		<>
+			<form onSubmit={handlesubmit}>
+				<input name='name' value={data.name} onChange={handleUpdate} placeholder='Name'/>
+				<input name='price' value={data.price} onChange={handleUpdate} placeholder='Price'/>
+				<button>ADD</button>
+			</form>
+		</>
+		)
+}

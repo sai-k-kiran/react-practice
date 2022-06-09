@@ -1,0 +1,121 @@
+UseState is a special fn from react hook that lets you add React state to function components.
+
+Without useState hook, if we need to add some state to a fn component, we need to convert that fn into a class.
+But with useState, we can use a hook inside the existing fn component
+
+useState hook is used to change a state(value) of a variable or a fn.
+
+useState returns an array of the item passed into it and a fn -->
+Ex.  console.log(useState('Saikiran')) returns ['Saikiran', fn]
+
+useState('Saikiran')[0] returns 'Saikiran'
+
+const [name, fn] = useState('Saikiran') --> Thsi creates a variable "name" with a value "Saikiran".
+the fn is used to change the value of "name" variable. Let give this fn a name "setName". Therefore, it becomes
+const [name, setName] = useState('Saikiran'). Here setName is a fn which is used to change teh value of "name"
+
+Ex-->
+    const [name, setName] = useState('Saikiran')
+
+    const handleChange = () => {
+        setName("Altair Ibn La'Ahad")
+    }
+    return (
+        <div>
+            <h1>{name}</h1
+            <button onClick={handleChange}>Click to change name</button>
+        </div>
+    )
+
+handleChange fn is used to change the name to "Altair Ibn La'Ahad" through setName
+----------------------------------------------------------------------------------------
+
+Ex --> const bioData = [
+    {
+        id: 1,
+        name: 'Saikiran',
+        age: 25
+    },
+     {
+        id: 2,
+        name: 'Altair',
+        age: 38
+    },
+]
+
+const [array, setArray] = useState(bioData)
+
+const clear = () =>{
+    setArray([])
+} 
+return (
+    <>
+    {array.map((elem) => {
+        return <h1 key={elem.id}>Name: {elem.name}, Age: {elem.age}</h1>
+    })}
+    <button onClick={clear}>Clear</button>
+    </>
+)
+Thsi will return Name: Saikiran, Age:  25 and Name: Altair, Age: 38 in the h1 size
+
+You can do this without useState hook. But to implement the clear fn, useState will be needed bcoz if you write
+const clear = () => {
+    bioData = []
+}
+see that we declred the bioData array as a const so we cant change it to na empty array inside clear fn. If 
+we had used var instead of const, it will give fn scope problems i.e we couldn't use it outside the fn.
+So to set the array empty when the clear fn is called, we use useState to set it to an empty array
+
+key={elem.id} is needed bcoz every child should have a unique identifier.
+----------------------------------------------------------------------------
+                        TODO APP
+
+ const bioData = [
+    {
+        id: 1,
+        name: 'Saikiran',
+        age: 25
+    },
+    {
+        id: 2,
+        name: 'Altair',
+        age: 38
+    }
+]
+
+const [data, setData] = useState(bioData)
+
+const remove = (id) => {
+    const newData = array.filter((object) => object.id !== id)
+    setData(newData)
+}
+
+const clear = () =>{
+    setData([])
+} 
+return (
+    <>
+    {data.map((elem) => {
+        return 
+        <h1 key={elem.id}>Name: {elem.name}, Age: {elem.age}
+        <button onClick={() => remove(elem.id)}>Remove</button>
+        </h1>
+    })}
+    <button onClick={clear}>Clear</button>
+    </>
+)                       
+
+<button onClick={() => remove(elem.id)}>Remove</button> --> this button is for removing that element.
+See that remove fn has passed an "id" parameter bcoz the remove fn needs a parameter to remove that element only
+on which the button is clicked.
+
+() => remove(elem.id) is an inline fn. If we write it as remove(elem.id), then the remove fn will run without 
+even clicking the remove button.
+
+const remove = (id) => {
+    const newData = array.filter((object) => object.id !== id)
+    setData(newData)
+}
+"data" contains the data of all the elements(id, name, age). We are filtering the "data" based on the id we passed
+as parameter. That element whose id doesn't match with the id we passed as parameter, then that element will be 
+stored in a new array called "newData". And we are setting the state value of setData to newData

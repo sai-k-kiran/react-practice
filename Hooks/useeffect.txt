@@ -1,0 +1,73 @@
+useEffect hook let us perform side effects in our fn components
+
+Side effects are anything that effects somr=ething outside of the scope of the current fn that's being executed.
+This includes --> API requests to backend , Calls to automation service, Error tracking Calls, changing the DOM
+
+const Effects = () => {
+    const [count, setCount] = useState(0)
+
+    useEffect(() => {
+        if(count >= 1){
+            document.title = `Chats (${count})`
+        }else{
+            document.title = `Chats`
+        }
+        console.log("Page rendered")
+    }, [count]) --> dependency list array, run useEffect when count value changes
+
+    console.log("This is outside")
+
+    return (
+        <>
+        <h1>{count}</h1>
+        <button onClick={()=>setCount(count+1)}>Click Me</button>
+        </>
+    )
+}
+
+Whenever the "Click Me" button is clicked, the count value increments by 1. The title of the web page in the 
+browser tab also increments by 1. 
+
+Whenever, the count value increments, the page re-renders and useEffect will run every time teh page re-renders.
+So the "Page rendered" will be shown every time the count value increments.
+
+The dependency list tells the useEffect fn to run every time whatever in the list is changing. Here the dependency
+list array contains "count". So the useEffect runs every time the count vlaue changes.
+
+To stop useEffect from running on every re-render, use empty dependency list "[]". Empty dependency list tells
+the useEffect to run only when the page loads first time.
+
+Console will log "This is outside" first and then whatever that is in useEffect fn
+-----------------------------------------------------------------------------------------
+
+const Effects = () => {
+    const [width, setWidth] = useState(window.innerWidth)
+
+    const actualWidth = () => {
+        setWidth(window.innerWidth)
+    }
+    useEffect(() => {
+        window.addEventListener("resize", actualWidth)
+        return () => {
+            window.removeEventListener("resize", actualWidth)
+        }
+    }
+
+    return (
+        <>
+            <h1>Width of window is: </h1>
+            <h1>{width}</h1>
+        </>
+    )
+}
+
+window.addEventListener("resize", actualWidth) --> Call actualWidth fn every time a "resize" event occurs or when
+the window size is changed.
+
+Th actualWidth fn runs every time when the window is resized a pixel or two. This creates a lot of actualWidth fns
+running and causes memory problems. To remove the actualWidth fn once it has ran, we use a cleanup fn
+
+return () => {
+            window.removeEventListener("resize", actualWidth)
+        }
+Removes the "resize" event listener immediately after it has ran. 

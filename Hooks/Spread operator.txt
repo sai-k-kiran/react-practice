@@ -1,0 +1,49 @@
+const UseStateObject = () => {
+    const [data, setData] = useState({
+        name: 'Saikiran', age:25
+    })
+    const changeName = () => {
+        setdata({name:'Altair'})
+    }
+    return (
+        <>
+            <h1>Name:{data.name}, Age:{data.age}</h1>
+            <button onClick={changeName}>Change Name</button>
+        </>
+    )
+}
+data is an object containing property:value pairs. changeName fn is used to set the "name" property of the 
+"data" object to be "Altair". But the "age" property is not mentioned(i.e empty). So when we click "Change Name"
+button, it changes the name to "Altair" but the "Age" becomes empty bcoz it is empty in setdata fn.
+
+This is the wrong way to update the state of an object's property. To do that, use spread operator(...)
+
+ const changeName = () => {
+        setData(...data, name:'Altair')
+    }
+...data in setData meams to copy the properties of "data" as it is in teh setData fn. name:'Altair' means to 
+change the value of "name" property to "Altair".
+setData(...data, name:'Altair') means to set the value of "name" to "Altair" and keep the remaining properties
+as it is.
+
+This is how you update the values of a particular properties in an object without touching others
+------------------------------------------------------------------------------------
+
+                                    SHORT CIRCUIT EVALUATION
+
+const [name, setName] = useState('')
+
+return (
+    <>
+        <h1> {name || "Saikiran"} </h1>
+        <h2> {name && "Saikiran"}</h2>
+    </>
+)
+If name = true(or non empty or non zero), then h1 elem. will contain name. Here h1 tag will contain "Saikiran" bcoz
+name = empty do it is false.
+
+If name = true(or non empty or non zero), then h2 elem. will contain "Saikiran". Here h2 elem contains an empty
+value bcoz name = false.
+
+So if something is true, then || operator will show that something and vice versa.
+If something is true, then && operator will show the other thing and vice versa 

@@ -1,0 +1,48 @@
+useContext hook makes it easy to pass the data throughout your app without manually passing props down the tree
+
+const App = () => {                           --> In App.js
+    return <ComA />
+}
+const ComA = () => {                          --> In ComA.js
+    return <ComB name={"Saikiran"} />         
+}
+const ComB = ({name}) => {                    --> In ComB.js
+    return <ComC name={"Saikiran"} />
+}
+const ComC = ({name}) => {                    --> In ComC.js
+    return <p>Hello {name}</p>
+}
+
+The prop "name={"Saikiran"}" is passed from ComA to ComB into ComC. The prop is utilized in ComC which is passed
+from ComA. If there were more components,we would have to pass to thorugh all the components to the deepest comp.
+
+With useContext, we can avoid passing the props through each and every components.
+-------------------------------------------------------------------------------------
+
+const BioData = createContext();
+
+const ComA = () => {                            --> In ComA.js
+    return(
+    <BioData.Provider value={"Saikiran"}
+        <ComB />     
+    </BioData.Provider>
+    )
+}
+export default ComA
+export {BioData}
+
+const ComB = () => {                            --> In ComB.js
+    return <ComC />
+}
+
+import {BioData} from './ComA'
+const ComC = ({name}) => {   
+    const context = useContext(BioData)         --> In ComC.js
+    return <p>Hello {context}</p>
+}
+
+A context was created named "BioData". the value(or say prop) which has to be passed to ComC is given provided 
+as a "value={"Saikiran"}" to "BioData.Provider".
+The BioData.Provider is to pass the value to the component which needs it. To get the value from .Provider - 
+create a context named "context" amd pass the BioData to it -  const context = useContext(BioData)
+Use this newly created context to get the value - Hello {context} --> Hello Saikiran

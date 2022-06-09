@@ -1,0 +1,21 @@
+useHistory can be used to get the history of the browser.
+
+import {useLocation} rom "react-router-dom"
+
+const Index = () => {
+    const location = useLocation()
+    const history = useHistory()
+
+    return (
+        <div>
+            <h1> Location: {location.pathname.replace("/", "") page}</h1>
+            {location.pathname === "/about/dashboard" ? <p>This is your dashboard</p> : <p>Login to see dashboard</p>}
+            <button onClick={history.goBack}>Go Back</button>
+            <button onClick={()=>history.push("/index")}>Home</button>
+        </div>
+        )
+}
+
+history.goBack goes to the previous page visited in the browser
+history.push("/index") goes to the .../index page of the website. You can write any other path instead of /index
+to go to that page.

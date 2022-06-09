@@ -1,0 +1,27 @@
+useRef is used with controlled input. controlled inputs are the react components in which there are no value and
+onChange attributes. That means they dont have a fixed value in the input field.
+
+useRef doesnt re-renders the page.
+
+const Name = useRef(null)
+const [show, setShow] = useState(false)
+
+const handleSubmit = (e) => {
+    e.preventDefault()
+    const input_name = Name.current.value
+    input_name === "" ? alert("Enter you name please") : setShow(true)
+}
+
+return (
+    <div>
+        <form onSubmit={handleSubmit}
+            <label htmlFor='name'>Enter your name</label>
+            <input type='text' ref={Name} />
+            <button>Submit</button>
+        </form>
+        <p> {show ? `You name is: ${input_name}` : ''}</p>
+    </div>
+)
+
+Here "Name" is a useRef fn. Name.current is the JSX element where the "Name" useRef fn is passed i.e <input typ='t..>
+Name.current.value is the value entered in the input field.
